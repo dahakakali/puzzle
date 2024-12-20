@@ -50,6 +50,44 @@
             color: #008CBA;
             font-weight: bold;
         }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            #puzzle-container {
+                width: 100%;
+                height: auto;
+                grid-template-columns: repeat(3, 100px);
+                grid-template-rows: repeat(3, 100px);
+            }
+
+            .piece {
+                width: 100px;
+                height: 100px;
+            }
+
+            #message {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #puzzle-container {
+                width: 100%;
+                height: auto;
+                grid-template-columns: repeat(3, 80px);
+                grid-template-rows: repeat(3, 80px);
+            }
+
+            .piece {
+                width: 80px;
+                height: 80px;
+            }
+
+            #message {
+                font-size: 14px;
+            }
+        }
+
     </style>
 </head>
 <body>
