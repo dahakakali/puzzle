@@ -50,44 +50,6 @@
             color: #008CBA;
             font-weight: bold;
         }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            #puzzle-container {
-                width: 100%;
-                height: auto;
-                grid-template-columns: repeat(3, 100px);
-                grid-template-rows: repeat(3, 100px);
-            }
-
-            .piece {
-                width: 100px;
-                height: 100px;
-            }
-
-            #message {
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            #puzzle-container {
-                width: 100%;
-                height: auto;
-                grid-template-columns: repeat(3, 80px);
-                grid-template-rows: repeat(3, 80px);
-            }
-
-            .piece {
-                width: 80px;
-                height: 80px;
-            }
-
-            #message {
-                font-size: 14px;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -98,7 +60,6 @@
     </div>
 
     <button onclick="shufflePuzzle()">Shuffle Puzzle</button>
-    <button onclick="submitPuzzle()">Submit Puzzle</button>
     <div id="message"></div>
 
     <script>
@@ -106,7 +67,7 @@
         window.onload = function() {
             const imageUrl = "https://raw.githubusercontent.com/dahakakali/puzzle/refs/heads/master/ss.png"; // Set your image path here
             createPuzzle(imageUrl);
-            setTimeout(shufflePuzzle, 3000); // Shuffle puzzle after 3 seconds
+            shufflePuzzle();
         }
 
         function createPuzzle(imgSrc) {
@@ -157,21 +118,6 @@
             });
         }
 
-        function submitPuzzle() {
-            if (isPuzzleSolved()) {
-                document.getElementById("message").textContent = "Puzzle Solved! 🎉";
-            } else {
-                document.getElementById("message").textContent = "Puzzle not solved yet. Keep trying! 🔄";
-            }
-        }
-
-        function isPuzzleSolved() {
-            let pieces = document.querySelectorAll('.piece');
-            return Array.from(pieces).every((piece, index) => {
-                return parseInt(piece.getAttribute('data-id')) === index;
-            });
-        }
-        
         let draggedPiece = null;
 
         function dragStart(e) {
@@ -210,8 +156,21 @@
                 let tempId = draggedPiece.getAttribute('data-id');
                 draggedPiece.setAttribute('data-id', e.target.getAttribute('data-id'));
                 e.target.setAttribute('data-id', tempId);
+
+                // Check if puzzle is solved
+                if (isPuzzleSolved()) {
+                    document.getElementById("message").textContent = "We cannot collect all the dots in life, let me enjoy collecting the dots";
+                }
             }
         }
+
+        function isPuzzleSolved() {
+            let pieces = document.querySelectorAll('.piece');
+            return Array.from(pieces).every((piece, index) => {
+                return parseInt(piece.getAttribute('data-id')) === index;
+            });
+        }
+        
     </script>
 </body>
 </html>
