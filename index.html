@@ -98,6 +98,7 @@
     </div>
 
     <button onclick="shufflePuzzle()">Shuffle Puzzle</button>
+    <button onclick="submitPuzzle()">Submit Puzzle</button>
     <div id="message"></div>
 
     <script>
@@ -105,7 +106,7 @@
         window.onload = function() {
             const imageUrl = "https://raw.githubusercontent.com/dahakakali/puzzle/refs/heads/master/ss.png"; // Set your image path here
             createPuzzle(imageUrl);
-            shufflePuzzle();
+            setTimeout(shufflePuzzle, 3000); // Shuffle puzzle after 3 seconds
         }
 
         function createPuzzle(imgSrc) {
@@ -156,6 +157,21 @@
             });
         }
 
+        function submitPuzzle() {
+            if (isPuzzleSolved()) {
+                document.getElementById("message").textContent = "Puzzle Solved! 🎉";
+            } else {
+                document.getElementById("message").textContent = "Puzzle not solved yet. Keep trying! 🔄";
+            }
+        }
+
+        function isPuzzleSolved() {
+            let pieces = document.querySelectorAll('.piece');
+            return Array.from(pieces).every((piece, index) => {
+                return parseInt(piece.getAttribute('data-id')) === index;
+            });
+        }
+        
         let draggedPiece = null;
 
         function dragStart(e) {
@@ -194,21 +210,8 @@
                 let tempId = draggedPiece.getAttribute('data-id');
                 draggedPiece.setAttribute('data-id', e.target.getAttribute('data-id'));
                 e.target.setAttribute('data-id', tempId);
-
-                // Check if puzzle is solved
-                if (isPuzzleSolved()) {
-                    document.getElementById("message").textContent = "We cannot collect all the dots in life, let me enjoy collecting the dots";
-                }
             }
         }
-
-        function isPuzzleSolved() {
-            let pieces = document.querySelectorAll('.piece');
-            return Array.from(pieces).every((piece, index) => {
-                return parseInt(piece.getAttribute('data-id')) === index;
-            });
-        }
-        
     </script>
 </body>
 </html>
