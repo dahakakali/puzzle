@@ -14,7 +14,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
+            width: 162%;
         }
 
         #puzzle-container {
@@ -63,6 +63,13 @@
     <div id="message"></div>
 
     <script>
+        // Define the initial positions of the pieces
+        let puzzleState = {
+            a: 1, b: 2, c: 3,
+            d: 4, e: 5, f: 6,
+            g: 7, h: 8, i: 9
+        };
+
         // Automatically load the image when the page is loaded
         window.onload = function() {
             const imageUrl = "https://raw.githubusercontent.com/dahakakali/puzzle/refs/heads/master/ss.png"; // Set your image path here
@@ -115,7 +122,10 @@
             let pieces = document.querySelectorAll('.piece');
             pieces.forEach((piece, index) => {
                 piece.style.order = shuffledIndices[index];
+                // Update puzzleState variables based on shuffled positions
+                updatePuzzleState(piece.getAttribute('data-id'), shuffledIndices[index]);
             });
+            console.log(puzzleState);
         }
 
         let draggedPiece = null;
@@ -157,20 +167,30 @@
                 draggedPiece.setAttribute('data-id', e.target.getAttribute('data-id'));
                 e.target.setAttribute('data-id', tempId);
 
+                // Update puzzleState based on piece movement
+                updatePuzzleState(draggedPiece.getAttribute('data-id'), e.target.getAttribute('data-id'));
+                console.log(puzzleState);
+
                 // Check if puzzle is solved
                 if (isPuzzleSolved()) {
-                    document.getElementById("message").textContent = "We cannot collect all the dots in life, let me enjoy collecting the dots";
+                    document.getElementById("message").textContent = "Puzzle Solved!";
                 }
             }
         }
 
-        function isPuzzleSolved() {
-            let pieces = document.querySelectorAll('.piece');
-            return Array.from(pieces).every((piece, index) => {
-                return parseInt(piece.getAttribute('data-id')) === index;
-            });
+        function updatePuzzleState(fromId, toId) {
+            // Update the puzzleState with the new positions
+            let temp = puzzleState[fromId];
+            puzzleState[fromId] = puzzleState[toId];
+            puzzleState[toId] = temp;
         }
-        
+
+        function isPuzzleSolved() {
+            // Check if the puzzleState matches the initial state
+            return puzzleState.a === 1 && puzzleState.b === 2 && puzzleState.c === 3 &&
+                puzzleState.d === 4 && puzzleState.e === 5 && puzzleState.f === 6 &&
+                puzzleState.g === 7 && puzzleState.h === 8 && puzzleState.i === 9;
+        }
     </script>
 </body>
 </html>
